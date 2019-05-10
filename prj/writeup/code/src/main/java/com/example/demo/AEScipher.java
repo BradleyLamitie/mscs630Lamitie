@@ -1,4 +1,4 @@
-/**
+package com.example.demo; /**
  * file: AEScipher
  * author: Bradley Lamitie
  * course: MSCS 630
@@ -613,7 +613,6 @@ class AEScipher {
         sHex = aesMixColumn(sHex);
         sHex = aesStateXOR(sHex, keyHex);
       }
-      System.out.println(sHex);
     }
 
     // Build the final cipher text being outputted.
@@ -681,7 +680,6 @@ class AEScipher {
         sHex = aesInverseShiftRow(sHex);
         sHex = aesInverseNibbleSub(sHex);
       }
-      System.out.println(sHex);
 
     }
     // Build the final cipher text being outputted.
