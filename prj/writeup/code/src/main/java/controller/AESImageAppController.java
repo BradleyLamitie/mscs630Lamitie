@@ -1,3 +1,13 @@
+/**
+ * file: AESImageAppController.java
+ * author: Bradley Lamitie
+ * course: MSCS 630
+ * assignment: Project
+ * due date: May 12, 2018
+ * version: 1.0
+ *
+ * This file contains the declaration of the AESImageAppController class
+ */
 package controller;
 
 import java.awt.image.BufferedImage;
@@ -17,51 +27,139 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.ImageProcessor;
 
+/**
+ * AESImageAppController
+ * 
+ * This class maps requests passed from the HTML pages and Thymeleaf to
+ * perform operations and redirect to the other pages. This application 
+ * uses MVC.
+ */
 @Controller
 public class AESImageAppController {
-  public static String uploadDirectory = System.getProperty("user.dir")+"/AESImage";
+	
+	// This is where we store the image passed from the user.
+  public static String uploadDirectory = "C:"+"/AESImage";
+  
+  /**
+   * uploadPage
+   * 
+   * This function redirects to AESImageLanding.html when the user visits 
+   * localhost:8080
+   * 
+   * Parameters:
+   * 	model: The parameter used to carry data
+   * 
+   * Return value: The page (view) that will be served to the user in response 
+   * to the mapping
+   * 
+   */
   @RequestMapping("/")
-  public String UploadPage(Model model) {
-	  return "AESImageLanding";
+  public String uploadPage(Model model) {
+	  // Load HTML page view
+	  return "AESImageLandingView";
   }
   
+  /**
+   * errorPage
+   * 
+   * This function redirects to error.html when the system runs into an error
+   * The only ways the user can get here is by entering a file that isnt jpg
+   * or png, or internal errors with the system.
+   * 
+   * Return value: The page (view) that will be served to the user in response 
+   * to the mapping
+   * 
+   */
+  @RequestMapping("/errorPage")
+  public String errorPage() {
+	  // Load HTML page view
+	  return "ErrorView";
+  }
+  
+  /**
+   * upload
+   * 
+   * This function saves the user provided image to a directory, 
+   * encrypts/decrypts it and saves/passes the image to the download page
+   * 
+   * Parameters:
+   * 	model:   The parameter used to carry data
+   * 	file:    The image passed in from the user
+   *  key:     The key to be used in encryption/decryption. The key is in ASCII
+   *  					 format
+   *  aesType: The user's choice. Value will be either Encrypt or Decrypt
+   * Return value: The page (view) that will be served to the user in response 
+   * to the mapping
+   * 
+   */
   @RequestMapping("/uploadData")
-  public String upload(Model model,@RequestParam("image") MultipartFile file, @RequestParam("key") String keyHex, @RequestParam("AESType") String aesType) {	  
-	  Path fileNameandPath = Paths.get(uploadDirectory, file.getOriginalFilename());
+  public String upload(Model model,
+  										 @RequestParam("image") MultipartFile file,
+  										 @RequestParam("key") String key,
+  										 @RequestParam("AESType") String aesType){
+  	
+  	// Convert the ASCII characters to a valid hexadecimal key
+	  String keyHex = ImageProcessor.stringToHex(key);
+	  
+	  // Get the filename and path for the image passed in from user
+	  Path fileNameandPath = Paths.get(uploadDirectory, 
+	  																 file.getOriginalFilename());
+	  
+	  // Generate the file and write the image onto it
 	  File imageFile = fileNameandPath.toFile();
 	  BufferedImage image = null;
 	  try {
-		Files.write(fileNameandPath, file.getBytes());
+	  	Files.write(fileNameandPath, file.getBytes());
 	    image = ImageIO.read(imageFile);
 	    Files.delete(fileNameandPath);
 	  } catch (IOException e) {
 	    e.printStackTrace();
 	    System.out.println("COULDNT READ IMAGE AT = " + fileNameandPath);
 	  }
+	  
+	  // Ensure the image isn't blank
 	  assert image != null;
+	  
+	  // Gather image height and width
 	  int imageHeight = image.getHeight();
-      int imageWidth = image.getWidth();
+    int imageWidth = image.getWidth();
 
-      BufferedImage outputImage = null;
-      if(aesType.equals("Encrypt")) {
-          outputImage = ImageProcessor.encryptImage(image, imageWidth, imageHeight, keyHex);
-      } else if(aesType.equals("Decrypt")) {
-    	  outputImage = ImageProcessor.decryptImage(image, imageWidth, imageHeight, keyHex);
-      }
-
-      File outputFile = new File(uploadDirectory + "\\Output.jpg");
-      try {
-        outputFile.createNewFile();
-      } catch (IOException e) {
-        e.printStackTrace();
-        System.out.println("FILE ALREADY EXISTS");
-      }
-      try {
-        ImageIO.write(outputImage, "jpg", outputFile);
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-	  model.addAttribute("msg", "Successfully uploaded files ");
-	  return "AESImageDownload";
+    // Generate output image based on the user's AEStype selection 
+    BufferedImage outputImage = null;
+    if(aesType.equals("Encrypt")) {
+      outputImage = ImageProcessor.encryptImage(image, imageWidth,
+        																					imageHeight, keyHex);
+    } else if(aesType.equals("Decrypt")) {
+  	  outputImage = ImageProcessor.decryptImage(image, imageWidth,
+  	  																					imageHeight, keyHex);
+    }
+    
+    // Generate the output file and store in static directory
+    // NOTE: We store it in static directory so the user can view the image
+    //			 after encryption/decryption.
+    String outputFilePath = new File("src/main/resources/static").getAbsolutePath()  + "/output.jpg";
+    File outputFile = new File(outputFilePath);
+    try {
+      outputFile.createNewFile();
+    } catch (IOException e) {
+      e.printStackTrace();
+      System.out.println("FILE ALREADY EXISTS");
+    }
+    
+    // Write the image to the outputfile
+    try {
+      ImageIO.write(outputImage, "jpg", outputFile);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    
+    //TODO: CHANGE "output.jpg" TO PATH VARIABLE?
+    //TODO: PASS path variable as separate variable.
+    // Pass the image path as a variable to HTML page
+	  model.addAttribute("image", "output.jpg");
+	  model.addAttribute("imagePath", outputFilePath);
+	  
+	  // Load HTML page view
+	  return "AESImageDownloadView";
   }
 }

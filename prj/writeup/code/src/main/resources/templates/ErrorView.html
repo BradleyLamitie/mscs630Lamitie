@@ -1,0 +1,31 @@
+<!-- 
+// ErrorView.html
+// Creator: Bradley Lamitie
+// Date Created: 5/04/2019
+// Date Last Edited: 5/12/2019
+// Purpose: This page catches errors and allows for a fluid redirection back
+// to the landing page so the user can try again. The user will only reach
+// this page if they chose a file other than a jpg or png, or if it was 
+// an internal issue resulting from the code.
+-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>AESImage Landing</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <h1>Uh-Oh! Seems like something went wrong!</h1>
+    <br>
+    <h2>Did you use a .jpg or .png image? If so it may have been an 
+      internal issue on our side!</h2>
+    <br>
+    <form action="/" method="post">
+      <h2>Click the button below to return to the landing site to try 
+        again!</h2>
+      <input type = "submit" value = "Return to Landing"></input>
+    </form>
+  </body>
+</html>
+		
