@@ -1,0 +1,33 @@
+<!-- 
+// AESImageDownloadView.html
+// Creator: Bradley Lamitie
+// Date Created: 5/04/2019
+// Date Last Edited: 5/12/2019
+// Purpose: This page is used to display the resulting image made
+// as a product of AES encryption or decryption. The user can download the 
+// image from here, or use the path to navigate to the file.
+//
+-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>AESImage Landing</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <h1>Thanks for using the AESImage Encryptor/Decryptor!</h1>
+    <h2>You can view the encrypted file by going to the directory below</h2>
+    <br>
+    <h3>The file's path is:</h3>
+    <br>
+    <a th:text="${imagePath}"></a>
+    <br>
+    <form action="/" method="post">
+      <h2>Click the button below to return to the landing site to try 
+        again!</h2>
+      <input type = "submit" value = "Return to Landing"></input>
+    </form>
+  </body>
+</html>
+
