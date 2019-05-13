@@ -24,20 +24,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class MyErrorController implements ErrorController  {
  
-	/**
-	 * handleError
-	 * 
-	 * This function redirects to errorView.html when the user runs into an error
-	 * The only ways the user can get here is by entering a file that isnt jpg
-	 * or png, a file larger then 1MB or internal errors with the system.
-	 * 
-	 * Return value: The page (view) that will be served to the user in response 
-	 * to the mapping
-	 * 
-	 */
+/**
+ * handleError
+ * 
+ * This function redirects to errorView.html when the user runs into an error
+ * The only ways the user can get here is by entering a file that isnt jpg
+ * or png, a file larger then 1MB or internal errors with the system.
+ * 
+ * Return value: The page (view) that will be served to the user in response 
+ * to the mapping
+ * 
+ */
   @RequestMapping("/error")
   public String handleError(HttpServletRequest request) {
-    return "errorView";
+    return "ErrorView";
   }
  
   /**
