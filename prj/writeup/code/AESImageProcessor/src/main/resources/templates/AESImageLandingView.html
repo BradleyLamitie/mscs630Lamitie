@@ -16,26 +16,31 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
-  <body>
+  <body  style="text-align:center;">
     <h1>Welcome to the AESImage Encryptor/Decryptor</h1>
-    <h2>Please enter a 128-bit hexadecimal key and an image. When you are done, please press Submit.</h2>
-    <br>
+    <h2>Please enter a 128-bit hexadecimal key and an image. When you are done,
+     please press Submit.</h2>
     <form action="/uploadData" method="post" enctype="multipart/form-data">
-      <h3>Type in a 16 character key here(128-bit): </h3>
+      <h3>Type in a 16 character key below(128-bit): </h3>
       <h4>The key will be translated to hexadecimal format</h4>
-      <input type="text" name = "key" style="width: 260px;" pattern=".{16,16}" required title="16 characters">
+      <input type="text" name = "key" style="width: 260px;" pattern=".{16,16}"
+       required title="16 characters">
       <br>                                     
-      <h3>Select an image by pressing the choose file button and navigating to the image:</h3>
-      <input type="file" name="image" accept="image/jpeg, image/png" value="fileupload" id="fileupload" required title="image must be chosen(jpg or png)">
+      <h3>Select an image by pressing the choose file button and navigating to 
+      the image:</h3>
+      <h4> NOTE: The image must be 1MB or less</h4>
+      <input type="file" name="image" accept="image/jpeg, image/png" 
+      value="fileupload" id="fileupload" 
+      required title="image must be chosen(jpg or png)">
       <br>
-      <br>
-      <input type="radio" name="AESType" value="Encrypt" checked>Encrypt<br>
+      <h3>Please select how you'd like to process your image</h3>
+      <input type="radio" name="AESType" value="Encrypt" checked>Encrypt 
       <input type="radio" name="AESType" value="Decrypt" >Decrypt<br>
-      <br>
       <br>
       <input type="submit" value="Submit"/>
     </form>
-    <h4>NOTE: It will take some time to encrypt/decrypt your image, you will be redirected as soon as it's done.</h4>
+    <h4>NOTE: It will take some time to encrypt/decrypt your image, you will be 
+    redirected as soon as it's done.</h4>
   </body>
 </html>
 

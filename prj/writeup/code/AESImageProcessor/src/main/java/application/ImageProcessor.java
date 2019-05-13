@@ -260,7 +260,7 @@ public class ImageProcessor {
    * 
    * Return value: The stateHexes that are derived from the image
    */
-  private static String[] imageToStateHexes(BufferedImage image, 
+  public static String[] imageToStateHexes(BufferedImage image, 
   																					int imageWidth, int imageHeight){
   	
   	// Break the image down into pixels in hexadecimal form
@@ -341,18 +341,10 @@ public class ImageProcessor {
   	// Break the image into stateHexes 
   	String[] stateHexes = imageToStateHexes(image, imageWidth, imageHeight);
     System.out.println("FINISHED READING");
-
-    for(String stateHex: stateHexes) {
-    	System.out.println("STATEHEX:" + stateHex);
-    }
     
     // Decrypt the stateHexes
     String[] decryptedStateHexes = decryptStateHexes(stateHexes, keyHex);
     System.out.println("FINISHED DECRYPTING");
-    
-    for(String stateHex: decryptedStateHexes) {
-    	System.out.println("DEC STATEHEX:" + stateHex);
-    }
     
     // Convert the decrypted stateHexes to an image
     return stateHexesToImage(decryptedStateHexes, imageWidth, imageHeight);

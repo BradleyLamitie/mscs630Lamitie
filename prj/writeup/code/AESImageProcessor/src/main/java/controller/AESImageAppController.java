@@ -60,23 +60,6 @@ public class AESImageAppController {
   }
   
   /**
-   * errorPage
-   * 
-   * This function redirects to error.html when the system runs into an error
-   * The only ways the user can get here is by entering a file that isnt jpg
-   * or png, or internal errors with the system.
-   * 
-   * Return value: The page (view) that will be served to the user in response 
-   * to the mapping
-   * 
-   */
-  @RequestMapping("/errorPage")
-  public String errorPage() {
-	  // Load HTML page view
-	  return "ErrorView";
-  }
-  
-  /**
    * upload
    * 
    * This function saves the user provided image to a directory, 
@@ -97,7 +80,7 @@ public class AESImageAppController {
   										 @RequestParam("image") MultipartFile file,
   										 @RequestParam("key") String key,
   										 @RequestParam("AESType") String aesType){
-  	
+  	long t0 = System.currentTimeMillis();
   	// Convert the ASCII characters to a valid hexadecimal key
 	  String keyHex = ImageProcessor.stringToHex(key);
 	  
@@ -112,7 +95,6 @@ public class AESImageAppController {
 	  	Files.write(fileNameandPath, file.getBytes());
 	    image = ImageIO.read(imageFile);
 	    Files.delete(fileNameandPath);
-	    new File(uploadDirectory).delete();
 	  } catch (IOException e) {
 	    e.printStackTrace();
 	    System.out.println("COULDNT READ IMAGE AT = " + fileNameandPath);
@@ -138,7 +120,9 @@ public class AESImageAppController {
     // Generate the output file and store in static directory
     // NOTE: We store it in static directory so the user can view the image
     //			 after encryption/decryption.
-    String outputFilePath = new File("src/main/resources/static").getAbsolutePath()  + "\\output.png";
+    String outputFilePath = 
+    		new File("src/main/resources/static").getAbsolutePath()
+    		+ "\\output.png";
     File outputFile = new File(outputFilePath);
     try {
       outputFile.createNewFile();
@@ -160,6 +144,7 @@ public class AESImageAppController {
 	  model.addAttribute("image", "output.png");
 	  model.addAttribute("imagePath", outputFilePath);
 	  
+	  System.out.println((System.currentTimeMillis() - t0));
 	  // Load HTML page view
 	  return "AESImageDownloadView";
   }
