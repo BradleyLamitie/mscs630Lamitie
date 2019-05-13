@@ -121,9 +121,9 @@ public class AESImageAppController {
     // NOTE: We store it in static directory so the user can view the image
     //			 after encryption/decryption.
     String outputFilePath = 
-    		new File("src/main/resources/static").getAbsolutePath()
-    		+ "\\output.png";
+    		uploadDirectory + "/output.png";
     File outputFile = new File(outputFilePath);
+    System.out.println(outputFilePath);
     try {
       outputFile.createNewFile();
     } catch (IOException e) {
@@ -144,7 +144,7 @@ public class AESImageAppController {
 	  model.addAttribute("image", "output.png");
 	  model.addAttribute("imagePath", outputFilePath);
 	  
-	  System.out.println((System.currentTimeMillis() - t0));
+	  System.out.println("Time to encrypt:" + (System.currentTimeMillis() - t0)/1000.0);
 	  // Load HTML page view
 	  return "AESImageDownloadView";
   }
